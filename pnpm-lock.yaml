@@ -7,12 +7,30 @@ settings:
 importers:
   .:
     dependencies:
+      '@radix-ui/react-slot':
+        specifier: ^1.1.2
+        version: 1.1.2(@types/react@19.0.8)(react@19.0.0)
       '@tailwindcss/postcss':
         specifier: ^4.0.6
         version: 4.0.6
+      class-variance-authority:
+        specifier: ^0.7.1
+        version: 0.7.1
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
+      lucide-react:
+        specifier: ^0.482.0
+        version: 0.482.0(react@19.0.0)
       next:
         specifier: 15.1.7
         version: 15.1.7(@babel/core@7.26.9)(@playwright/test@1.50.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      next-auth:
+        specifier: 5.0.0-beta.25
+        version: 5.0.0-beta.25(next@15.1.7(@babel/core@7.26.9)(@playwright/test@1.50.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0)
+      next-template:
+        specifier: 'link:'
+        version: 'link:'
       postcss:
         specifier: ^8.5.2
         version: 8.5.2
@@ -22,9 +40,15 @@ importers:
       react-dom:
         specifier: ^19.0.0
         version: 19.0.0(react@19.0.0)
+      tailwind-merge:
+        specifier: ^3.0.2
+        version: 3.0.2
       tailwindcss:
         specifier: ^4.0.6
         version: 4.0.6
+      tailwindcss-animate:
+        specifier: ^1.0.7
+        version: 1.0.7(tailwindcss@4.0.6)
       zod:
         specifier: ^3.24.2
         version: 3.24.2
@@ -147,6 +171,21 @@ packages:
   '@asamuzakjp/css-color@2.8.3':
     resolution:
       { integrity: sha512-GIc76d9UI1hCvOATjZPyHFmE5qhRccp3/zGfMPapK3jBi+yocEzp6BBB0UnfRYP9NP4FANqUZYb0hnfs3TM3hw== }
+
+  '@auth/core@0.37.2':
+    resolution:
+      { integrity: sha512-kUvzyvkcd6h1vpeMAojK2y7+PAV5H+0Cc9+ZlKYDFhDY31AlvsB+GW5vNO4qE3Y07KeQgvNO9U0QUx/fN62kBw== }
+    peerDependencies:
+      '@simplewebauthn/browser': ^9.0.1
+      '@simplewebauthn/server': ^9.0.2
+      nodemailer: ^6.8.0
+    peerDependenciesMeta:
+      '@simplewebauthn/browser':
+        optional: true
+      '@simplewebauthn/server':
+        optional: true
+      nodemailer:
+        optional: true
 
   '@babel/code-frame@7.26.2':
     resolution:
@@ -1386,6 +1425,10 @@ packages:
       { integrity: sha512-nn5ozdjYQpUCZlWGuxcJY/KpxkWQs4DcbMCmKojjyrYDEAGy4Ce19NN4v5MduafTwJlbKc99UA8YhSVqq9yPZA== }
     engines: { node: '>=12.4.0' }
 
+  '@panva/hkdf@1.2.1':
+    resolution:
+      { integrity: sha512-6oclG6Y3PiDFcoyk8srjLfVKyMfVCKJ27JwNPViuXziFpmdz+MZnZN/aKY0JGXgYuO/VghU0jcOAZgWXZ1Dmrw== }
+
   '@playwright/test@1.50.1':
     resolution:
       { integrity: sha512-Jii3aBg+CEDpgnuDxEp/h7BimHcUTDlpEtce89xEumlJ5ef2hqepZ+PWp1DDpYC/VO9fmWVI1IlEaoI5fK9FXQ== }
@@ -1417,6 +1460,26 @@ packages:
       webpack-hot-middleware:
         optional: true
       webpack-plugin-serve:
+        optional: true
+
+  '@radix-ui/react-compose-refs@1.1.1':
+    resolution:
+      { integrity: sha512-Y9VzoRDSJtgFMUCoiZBDVo084VQ5hfpXxVE+NgkdNsjiDBByiImMZKKhxMwCbdHvhlENG6a833CbFkOQvTricw== }
+    peerDependencies:
+      '@types/react': '*'
+      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+
+  '@radix-ui/react-slot@1.1.2':
+    resolution:
+      { integrity: sha512-YAKxaiGsSQJ38VzKH86/BPRC4rh+b1Jpa+JneA5LRE7skmLPNAyeG8kPJj/oo4STLvlrs8vkf/iYyc3A5stYCQ== }
+    peerDependencies:
+      '@types/react': '*'
+      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+    peerDependenciesMeta:
+      '@types/react':
         optional: true
 
   '@rollup/rollup-android-arm-eabi@4.34.7':
@@ -1924,6 +1987,10 @@ packages:
   '@types/babel__traverse@7.20.6':
     resolution:
       { integrity: sha512-r1bzfrm0tomOI8g1SzvCaQHo6Lcv6zu0EA+W2kHrt8dyrHQxGzBBL4kdkzIS+jBMV+EYcMAEAqXqYaLJq5rOZg== }
+
+  '@types/cookie@0.6.0':
+    resolution:
+      { integrity: sha512-4Kh9a6B2bQciAhf7FSuMRRkUWecJgJu9nPnx3yzpsfXX/c50REIqpHY4C82bXP90qrLtXtkDxTZosYO3UpOwlA== }
 
   '@types/doctrine@0.0.9':
     resolution:
@@ -2628,6 +2695,10 @@ packages:
     resolution:
       { integrity: sha512-9z8TZaGM1pfswYeXrUpzPrkx8UnWYdhJclsiYMm6x/w5+nN+8Tf/LnAgfLGQCm59qAOxU8WwHEq2vNwF6i4j+Q== }
 
+  class-variance-authority@0.7.1:
+    resolution:
+      { integrity: sha512-Ka+9Trutv7G8M6WT6SeiRWz792K5qEqIGEGzXKhAE6xOWAY6pPH8U+9IY3oCMv6kqTmLsv7Xh/2w2RigkePMsg== }
+
   clean-css@5.3.3:
     resolution:
       { integrity: sha512-D5J+kHaVb/wKSFcyyV75uCn8fiY4sV38XJoe4CUyGQ+mOU/fMVYUdH1hJC+CJQ5uY3EnW27SbJYS4X8BiLrAFg== }
@@ -2651,6 +2722,11 @@ packages:
   client-only@0.0.1:
     resolution:
       { integrity: sha512-IV3Ou0jSMzZrd3pZ48nLkT9DA7Ag1pnPzaiQhpW7c3RbcqqzvzzVu+L8gfqMp/8IM2MQtSiqaCxrrcfu8I8rMA== }
+
+  clsx@2.1.1:
+    resolution:
+      { integrity: sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA== }
+    engines: { node: '>=6' }
 
   color-convert@2.0.1:
     resolution:
@@ -2720,6 +2796,11 @@ packages:
   convert-source-map@2.0.0:
     resolution:
       { integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg== }
+
+  cookie@0.7.1:
+    resolution:
+      { integrity: sha512-6DnInpx7SJ2AK3+CTUE/ZM0vWTUboZCegxhC2xiIydHR9jNuTAASBrfEpHhiGOZw/nX51bHt6YQl8jsGo4y/0w== }
+    engines: { node: '>= 0.6' }
 
   core-js-compat@3.40.0:
     resolution:
@@ -3920,6 +4001,10 @@ packages:
       { integrity: sha512-rg9zJN+G4n2nfJl5MW3BMygZX56zKPNVEYYqq7adpmMh4Jn2QNEwhvQlFy6jPVdcod7txZtKHWnyZiA3a0zP7A== }
     hasBin: true
 
+  jose@5.10.0:
+    resolution:
+      { integrity: sha512-s+3Al/p9g32Iq+oqXxkW//7jk2Vig6FF1CFqzVXoTUXt2qz89YWbL+OwS17NFYEvxC35n0FKeGO2LGYSxeM2Gg== }
+
   js-tokens@4.0.0:
     resolution:
       { integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ== }
@@ -4182,6 +4267,12 @@ packages:
     resolution:
       { integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w== }
 
+  lucide-react@0.482.0:
+    resolution:
+      { integrity: sha512-XM8PzHzSrg8ATmmO+fzf+JyYlVVdQnJjuyLDj2p4V2zEtcKeBNAqAoJIGFv1x2HSBa7kT8gpYUxwdQ0g7nypfw== }
+    peerDependencies:
+      react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
+
   lz-string@1.5.0:
     resolution:
       { integrity: sha512-h5bgJWpxJNswbU7qCrV0tIKQCaS3blPDrqKWx+QxzuzL1zGUzij9XCWLrSLsJPu5t+eWA/ycetzYAO5IOMcWAQ== }
@@ -4301,6 +4392,23 @@ packages:
     resolution:
       { integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw== }
 
+  next-auth@5.0.0-beta.25:
+    resolution:
+      { integrity: sha512-2dJJw1sHQl2qxCrRk+KTQbeH+izFbGFPuJj5eGgBZFYyiYYtvlrBeUw1E/OJJxTRjuxbSYGnCTkUIRsIIW0bog== }
+    peerDependencies:
+      '@simplewebauthn/browser': ^9.0.1
+      '@simplewebauthn/server': ^9.0.2
+      next: ^14.0.0-0 || ^15.0.0-0
+      nodemailer: ^6.6.5
+      react: ^18.2.0 || ^19.0.0-0
+    peerDependenciesMeta:
+      '@simplewebauthn/browser':
+        optional: true
+      '@simplewebauthn/server':
+        optional: true
+      nodemailer:
+        optional: true
+
   next@15.1.7:
     resolution:
       { integrity: sha512-GNeINPGS9c6OZKCvKypbL8GTsT5GhWPp4DM0fzkXJuXMilOO2EeFxuAY6JZbtk6XIl6Ws10ag3xRINDjSO5+wg== }
@@ -4363,6 +4471,10 @@ packages:
   nwsapi@2.2.16:
     resolution:
       { integrity: sha512-F1I/bimDpj3ncaNDhfyMWuFqmQDBwDB0Fogc2qpL3BWvkQteFD/8BzWuIRl83rq0DXfm8SGt/HFhLXZyljTXcQ== }
+
+  oauth4webapi@3.3.1:
+    resolution:
+      { integrity: sha512-ZwX7UqYrP3Lr+Glhca3a1/nF2jqf7VVyJfhGuW5JtrfDUxt0u+IoBPzFjZ2dd7PJGkdM6CFPVVYzuDYKHv101A== }
 
   object-assign@4.1.1:
     resolution:
@@ -4682,6 +4794,16 @@ packages:
       { integrity: sha512-MjOadfU3Ys9KYoX0AdkBlFEF1Vx37uCCeN4ZHnmwm9FfpbsGWMZeBLMmmpY+6Ocqod7mkdZ0DT31OlbsFrLlkA== }
     engines: { node: ^10 || ^12 || >=14 }
 
+  preact-render-to-string@5.2.3:
+    resolution:
+      { integrity: sha512-aPDxUn5o3GhWdtJtW0svRC2SS/l8D9MAgo2+AWml+BhDImb27ALf04Q2d+AHqUUOc6RdSXFIBVa2gxzgMKgtZA== }
+    peerDependencies:
+      preact: '>=10'
+
+  preact@10.11.3:
+    resolution:
+      { integrity: sha512-eY93IVpod/zG3uMF22Unl8h9KkrcKIRs2EGar8hwLZZDU1lkjph303V9HZBwufh2s736U6VXuhD109LYqPoffg== }
+
   prelude-ls@1.2.1:
     resolution:
       { integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g== }
@@ -4757,6 +4879,10 @@ packages:
     resolution:
       { integrity: sha512-Qb1gy5OrP5+zDf2Bvnzdl3jsTf1qXVMazbvCoKhtKqVs4/YK4ozX4gKQJJVyNe+cajNPn0KoC0MC3FUmaHWEmQ== }
     engines: { node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0 }
+
+  pretty-format@3.8.0:
+    resolution:
+      { integrity: sha512-WuxUnVtlWL1OfZFQFuqvnvs6MiAGk9UNsBostyBOB0Is9wb5uRESevA6rnl/rkksXaGX3GzZhPup5d6Vp1nFew== }
 
   process-nextick-args@2.0.1:
     resolution:
@@ -5394,6 +5520,16 @@ packages:
     resolution:
       { integrity: sha512-9QNk5KwDF+Bvz+PyObkmSYjI5ksVUYtjW7AU22r2NKcfLJcXp96hkDWU3+XndOsUb+AQ9QhfzfCT2O+CNWT5Tw== }
 
+  tailwind-merge@3.0.2:
+    resolution:
+      { integrity: sha512-l7z+OYZ7mu3DTqrL88RiKrKIqO3NcpEO8V/Od04bNpvk0kiIFndGEoqfuzvj4yuhRkHKjRkII2z+KS2HfPcSxw== }
+
+  tailwindcss-animate@1.0.7:
+    resolution:
+      { integrity: sha512-bl6mpH3T7I3UFxuvDEXLxy/VuFxBk5bbzplh7tXI68mwMokNYd1t9qPBHlnyTwfa4JGC4zP516I1hYYtQ/vspA== }
+    peerDependencies:
+      tailwindcss: '>=3.0.0 || insiders'
+
   tailwindcss@4.0.6:
     resolution:
       { integrity: sha512-mysewHYJKaXgNOW6pp5xon/emCsfAMnO8WMaGKZZ35fomnR/T5gYnRg2/yRTTrtXiEl1tiVkeRt0eMO6HxEZqw== }
@@ -5940,6 +6076,16 @@ snapshots:
       '@csstools/css-parser-algorithms': 3.0.4(@csstools/css-tokenizer@3.0.3)
       '@csstools/css-tokenizer': 3.0.3
       lru-cache: 10.4.3
+
+  '@auth/core@0.37.2':
+    dependencies:
+      '@panva/hkdf': 1.2.1
+      '@types/cookie': 0.6.0
+      cookie: 0.7.1
+      jose: 5.10.0
+      oauth4webapi: 3.3.1
+      preact: 10.11.3
+      preact-render-to-string: 5.2.3(preact@10.11.3)
 
   '@babel/code-frame@7.26.2':
     dependencies:
@@ -7050,6 +7196,8 @@ snapshots:
 
   '@nolyfill/is-core-module@1.0.39': {}
 
+  '@panva/hkdf@1.2.1': {}
+
   '@playwright/test@1.50.1':
     dependencies:
       playwright: 1.50.1
@@ -7068,6 +7216,19 @@ snapshots:
     optionalDependencies:
       type-fest: 2.19.0
       webpack-hot-middleware: 2.26.1
+
+  '@radix-ui/react-compose-refs@1.1.1(@types/react@19.0.8)(react@19.0.0)':
+    dependencies:
+      react: 19.0.0
+    optionalDependencies:
+      '@types/react': 19.0.8
+
+  '@radix-ui/react-slot@1.1.2(@types/react@19.0.8)(react@19.0.0)':
+    dependencies:
+      '@radix-ui/react-compose-refs': 1.1.1(@types/react@19.0.8)(react@19.0.0)
+      react: 19.0.0
+    optionalDependencies:
+      '@types/react': 19.0.8
 
   '@rollup/rollup-android-arm-eabi@4.34.7':
     optional: true
@@ -7597,6 +7758,8 @@ snapshots:
   '@types/babel__traverse@7.20.6':
     dependencies:
       '@babel/types': 7.26.8
+
+  '@types/cookie@0.6.0': {}
 
   '@types/doctrine@0.0.9': {}
 
@@ -8277,6 +8440,10 @@ snapshots:
 
   cjs-module-lexer@1.4.3: {}
 
+  class-variance-authority@0.7.1:
+    dependencies:
+      clsx: 2.1.1
+
   clean-css@5.3.3:
     dependencies:
       source-map: 0.6.1
@@ -8295,6 +8462,8 @@ snapshots:
       string-width: 7.2.0
 
   client-only@0.0.1: {}
+
+  clsx@2.1.1: {}
 
   color-convert@2.0.1:
     dependencies:
@@ -8339,6 +8508,8 @@ snapshots:
   convert-source-map@1.9.0: {}
 
   convert-source-map@2.0.0: {}
+
+  cookie@0.7.1: {}
 
   core-js-compat@3.40.0:
     dependencies:
@@ -9533,6 +9704,8 @@ snapshots:
 
   jiti@2.4.2: {}
 
+  jose@5.10.0: {}
+
   js-tokens@4.0.0: {}
 
   js-yaml@4.1.0:
@@ -9744,6 +9917,10 @@ snapshots:
     dependencies:
       yallist: 3.1.1
 
+  lucide-react@0.482.0(react@19.0.0):
+    dependencies:
+      react: 19.0.0
+
   lz-string@1.5.0: {}
 
   magic-string@0.30.17:
@@ -9819,6 +9996,12 @@ snapshots:
   natural-compare@1.4.0: {}
 
   neo-async@2.6.2: {}
+
+  next-auth@5.0.0-beta.25(next@15.1.7(@babel/core@7.26.9)(@playwright/test@1.50.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0):
+    dependencies:
+      '@auth/core': 0.37.2
+      next: 15.1.7(@babel/core@7.26.9)(@playwright/test@1.50.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      react: 19.0.0
 
   next@15.1.7(@babel/core@7.26.9)(@playwright/test@1.50.1)(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
     dependencies:
@@ -9902,6 +10085,8 @@ snapshots:
       boolbase: 1.0.0
 
   nwsapi@2.2.16: {}
+
+  oauth4webapi@3.3.1: {}
 
   object-assign@4.1.1: {}
 
@@ -10163,6 +10348,13 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
+  preact-render-to-string@5.2.3(preact@10.11.3):
+    dependencies:
+      preact: 10.11.3
+      pretty-format: 3.8.0
+
+  preact@10.11.3: {}
+
   prelude-ls@1.2.1: {}
 
   prettier-plugin-tailwindcss@0.6.11(@ianvs/prettier-plugin-sort-imports@4.4.1(prettier@3.5.0))(prettier@3.5.0):
@@ -10183,6 +10375,8 @@ snapshots:
       ansi-regex: 5.0.1
       ansi-styles: 5.2.0
       react-is: 17.0.2
+
+  pretty-format@3.8.0: {}
 
   process-nextick-args@2.0.1: {}
 
@@ -10797,6 +10991,12 @@ snapshots:
   supports-preserve-symlinks-flag@1.0.0: {}
 
   symbol-tree@3.2.4: {}
+
+  tailwind-merge@3.0.2: {}
+
+  tailwindcss-animate@1.0.7(tailwindcss@4.0.6):
+    dependencies:
+      tailwindcss: 4.0.6
 
   tailwindcss@4.0.6: {}
 
