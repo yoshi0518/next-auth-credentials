@@ -1,7 +1,6 @@
 import type { FC } from 'react';
-import Link from 'next/link';
 import { auth } from '@/auth';
-import { Button } from '@/components/ui/button';
+import { AuthButtonServer } from '@/components/auth-button.server';
 
 const Home: FC = async () => {
   const session = await auth();
@@ -12,20 +11,9 @@ const Home: FC = async () => {
       <div>
         <h1 className="text-2xl font-bold">Auth.js</h1>
       </div>
-      {!session && (
-        <div>
-          <Button>
-            <Link href="/api/auth/signin">SignIn</Link>
-          </Button>
-        </div>
-      )}
-      {session && (
-        <div>
-          <Button>
-            <Link href="/api/auth/signout">SignOut</Link>
-          </Button>
-        </div>
-      )}
+      <div>
+        <AuthButtonServer />
+      </div>
       <div>
         <pre className="bg-slate-100 p-2 text-sm text-slate-700">
           <code>{JSON.stringify(session, null, 2)}</code>
