@@ -1,5 +1,6 @@
 import { auth } from '@/auth';
 
+import { WhoAmIApi } from './who-am-i-api';
 import { WhoAmIServerAction } from './who-am-i-server-action';
 
 const Page: React.FC = async () => {
@@ -13,6 +14,7 @@ const Page: React.FC = async () => {
       </div>
       <div>User: {session?.user?.name}</div>
       <WhoAmIServerAction />
+      <WhoAmIApi />
     </main>
   );
 };
