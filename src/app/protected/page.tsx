@@ -1,5 +1,7 @@
 import { auth } from '@/auth';
 
+import { WhoAmIServerAction } from './who-am-i-server-action';
+
 const Page: React.FC = async () => {
   const session = await auth();
   console.log({ session });
@@ -10,6 +12,7 @@ const Page: React.FC = async () => {
         <h1 className="text-2xl font-bold">Test Route</h1>
       </div>
       <div>User: {session?.user?.name}</div>
+      <WhoAmIServerAction />
     </main>
   );
 };
