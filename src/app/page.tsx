@@ -1,8 +1,7 @@
-import type { FC } from 'react';
 import { auth } from '@/auth';
 import { AuthButtonServer } from '@/components/auth-button.server';
 
-const Home: FC = async () => {
+const Page: React.FC = async () => {
   const session = await auth();
   console.log({ session });
 
@@ -22,4 +21,4 @@ const Home: FC = async () => {
     </main>
   );
 };
-export default Home;
+export default Page;

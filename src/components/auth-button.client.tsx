@@ -14,7 +14,6 @@ export const AuthButtonClient: React.FC = () => {
       className="cursor-pointer"
       onClick={async () => {
         await signOut();
-        await signIn();
       }}
     >
       SignOut
