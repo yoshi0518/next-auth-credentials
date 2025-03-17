@@ -12,6 +12,9 @@ export const AuthButtonServer: React.FC = async () => {
     session.user = {
       name: session.user.name,
       email: session.user.email,
+      text: 'dummy',
+      authorize: 'dummy',
+      password: 'dummy',
     };
   }
 

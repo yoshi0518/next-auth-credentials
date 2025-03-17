@@ -1,4 +1,5 @@
 import type { NextAuthConfig, User } from 'next-auth';
+import { env } from '@/env';
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 
@@ -46,14 +47,39 @@ const authConfig: NextAuthConfig = {
               id: user.id,
               name: user.name,
               email: user.email,
+              password: user.password,
+              authorize: 'aaa',
             }
           : null;
       },
     }),
   ],
 
-  // 認証APIのベースパス
+  trustHost: true,
   basePath: BASE_PATH,
+  debug: Boolean(env.DEBUG),
+  session: {
+    strategy: 'jwt',
+  },
+
+  callbacks: {
+    jwt: async ({ token, user }) => {
+      console.log('[callbacks] jwt');
+      console.log({ token });
+      console.log({ user });
+      token.text = 'test';
+      return token;
+    },
+
+    session: async ({ session, token }) => {
+      console.log('[callbacks] session');
+      console.log({ session });
+      console.log({ token });
+
+      session.text = token.text;
+      return session;
+    },
+  },
 };
 
 export const { handlers, signIn, signOut, auth } = NextAuth(authConfig);
