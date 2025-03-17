@@ -58,6 +58,12 @@ const eslintConfig = [
     },
   },
   {
+    files: ['types/next-auth.d.ts'],
+    rules: {
+      '@typescript-eslint/consistent-type-definitions': 'off',
+    },
+  },
+  {
     files: [
       '**/page.tsx',
       '**/layout.tsx',

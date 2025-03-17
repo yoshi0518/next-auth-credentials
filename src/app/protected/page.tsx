@@ -6,7 +6,7 @@ import { WhoAmIServerAction } from './who-am-i-server-action';
 
 const Page: React.FC = async () => {
   const session = await auth();
-  console.log({ session });
+  console.log({ session_client: session });
 
   return (
     <main className="flex h-screen flex-col items-center justify-center gap-4">
