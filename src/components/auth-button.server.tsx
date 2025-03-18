@@ -8,15 +8,15 @@ export const AuthButtonServer: React.FC = async () => {
 
   console.log('AuthButtonServer', session);
 
-  if (session?.user) {
-    session.user = {
-      name: session.user.name,
-      email: session.user.email,
-      text: 'dummy',
-      authorize: 'dummy',
-      password: 'dummy',
-    };
-  }
+  // if (session?.user) {
+  //   session.user = {
+  //     name: session.user.name,
+  //     email: session.user.email,
+  //     // text: 'dummy',
+  //     // authorize: 'dummy',
+  //     // password: 'dummy',
+  //   };
+  // }
 
   return (
     <SessionProvider

@@ -1,11 +1,12 @@
 import type { NextAuthConfig, User } from 'next-auth';
+import type { ExtendedUser } from 'types/next-auth';
 import { env } from '@/env';
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 
 export const BASE_PATH = '/api/auth';
 
-const authConfig: NextAuthConfig = {
+const authConfig = {
   providers: [
     Credentials({
       name: 'Credentials',
@@ -42,15 +43,21 @@ const authConfig: NextAuthConfig = {
         // ユーザー情報の検索
         const user = users.find((user) => user.id === id && user.password === password);
 
-        return user
-          ? {
-              id: user.id,
-              name: user.name,
-              email: user.email,
-              password: user.password,
-              authorize: 'aaa',
-            }
-          : null;
+        if (!user) return null;
+
+        return {
+          access_token: 'access_token',
+          refresh_token: 'refresh_token',
+          token_type: 'Bearer',
+          id: user.id,
+          user_id: 'user_id',
+          name: user.name,
+          name_s: user.name,
+          email: user.email,
+          tanto_no: 1,
+          pc_name: 'pc_name',
+          password_status_no: 1,
+        } as ExtendedUser;
       },
     }),
   ],
@@ -63,23 +70,35 @@ const authConfig: NextAuthConfig = {
   },
 
   callbacks: {
-    jwt: async ({ token, user }) => {
+    async jwt({ token, user }) {
       console.log('[callbacks] jwt');
       console.log({ token });
       console.log({ user });
-      token.text = 'test';
-      return token;
+      return { ...token, ...user };
     },
 
-    session: async ({ session, token }) => {
+    async session({ session, token }) {
       console.log('[callbacks] session');
       console.log({ session });
       console.log({ token });
 
-      session.text = token.text;
+      session.user = {
+        access_token: token.access_token,
+        refresh_token: token.refresh_token,
+        token_type: token.token_type,
+        id: token.id,
+        user_id: token.user_id,
+        name: token.name,
+        name_s: token.name_s,
+        email: token.email,
+        tanto_no: token.tanto_no,
+        pc_name: token.pc_name,
+        password_status_no: token.password_status_no,
+        emailVerified: null,
+      } as ExtendedUser;
       return session;
     },
   },
-};
+} satisfies NextAuthConfig;
 
 export const { handlers, signIn, signOut, auth } = NextAuth(authConfig);
