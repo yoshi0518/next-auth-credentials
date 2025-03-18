@@ -1,4 +1,5 @@
-import type { NextAuthConfig, User } from 'next-auth';
+import type { NextAuthConfig, Session, User } from 'next-auth';
+import type { NextRequest } from 'next/server';
 import type { ExtendedUser } from 'types/next-auth';
 import { env } from '@/env';
 import NextAuth from 'next-auth';
@@ -65,9 +66,9 @@ const authConfig = {
     }),
   ],
 
-  // pages: {
-  //   signIn: '/login',
-  // },
+  pages: {
+    signIn: '/login',
+  },
 
   trustHost: true,
   basePath: BASE_PATH,
@@ -77,6 +78,26 @@ const authConfig = {
   },
 
   callbacks: {
+    // Middlewareのauthで実行される
+    // NextResponseを返すことでリダイレクトエラーやエラーを返すことができる
+    authorized: ({ auth, request: { nextUrl } }: { auth: Session | null; request: NextRequest }) => {
+      console.log('[callbacks] authorized');
+      // console.log({ auth });
+      console.log({ pathname: nextUrl.pathname });
+
+      const isOnAuthenticatedPage = nextUrl.pathname !== '/login';
+
+      if (isOnAuthenticatedPage) {
+        const isLoggedin = !!auth?.user;
+        if (!isLoggedin) {
+          // falseを返すと，Signinページにリダイレクトされる
+          return false;
+        }
+        return true;
+      }
+      return true;
+    },
+
     // JWTの作成(ログイン時など)、更新(クライアントからのセッション利用時など)のタイミングに実行される
     // ここでreturnされた情報がJWTに保存され，session callbackに転送される
     async jwt({ token, user }) {
