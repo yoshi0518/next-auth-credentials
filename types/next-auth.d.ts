@@ -1,23 +1,22 @@
-import type { DefaultSession, User as DefaultUser } from 'next-auth';
-import type { DefaultJWT } from 'next-auth/jwt';
+import type { DefaultSession } from 'next-auth';
+
+export type ExtendedUser = DefaultSession['user'] & {
+  access_token: string;
+  refresh_token: string;
+  token_type: string;
+  id: string;
+  user_id: string;
+  name: string;
+  name_s: string;
+  email: string;
+  tanto_no: number;
+  pc_name: string;
+  password_status_no: number;
+  emailVerified: Date | null; // 利用予定はないがsession.userのtype AdapterUserに合わせるため定義
+};
 
 declare module 'next-auth' {
-  interface Session extends DefaultSession {
-    text?: string;
-    user?: {
-      text?: string;
-    } & DefaultSession['user'];
-  }
-
-  interface User extends DefaultUser {
-    authorize: string;
-    password: string;
-  }
-}
-
-declare module 'next-auth/jwt' {
-  interface JWT extends DefaultJWT {
-    text?: string;
-    user?: User;
+  interface Session {
+    user: ExtendedUser;
   }
 }

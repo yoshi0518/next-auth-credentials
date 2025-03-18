@@ -1,11 +1,13 @@
-import type { NextAuthConfig, User } from 'next-auth';
+import type { NextAuthConfig, Session, User } from 'next-auth';
+import type { NextRequest } from 'next/server';
+import type { ExtendedUser } from 'types/next-auth';
 import { env } from '@/env';
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 
 export const BASE_PATH = '/api/auth';
 
-const authConfig: NextAuthConfig = {
+const authConfig = {
   providers: [
     Credentials({
       name: 'Credentials',
@@ -23,6 +25,9 @@ const authConfig: NextAuthConfig = {
       // 認証処理
       authorize: async ({ id, password }): Promise<User | null> => {
         console.log('authorize', id, password);
+
+        // 本来はバックエンドAPIでログイン認証・トークン発行などを行う
+
         // ダミーユーザー情報
         const users = [
           {
@@ -42,18 +47,28 @@ const authConfig: NextAuthConfig = {
         // ユーザー情報の検索
         const user = users.find((user) => user.id === id && user.password === password);
 
-        return user
-          ? {
-              id: user.id,
-              name: user.name,
-              email: user.email,
-              password: user.password,
-              authorize: 'aaa',
-            }
-          : null;
+        if (!user) return null;
+
+        return {
+          access_token: 'access_token',
+          refresh_token: 'refresh_token',
+          token_type: 'Bearer',
+          id: user.id,
+          user_id: 'user_id',
+          name: user.name,
+          name_s: user.name,
+          email: user.email,
+          tanto_no: 1,
+          pc_name: 'pc_name',
+          password_status_no: 1,
+        } as ExtendedUser;
       },
     }),
   ],
+
+  pages: {
+    signIn: '/login',
+  },
 
   trustHost: true,
   basePath: BASE_PATH,
@@ -63,23 +78,59 @@ const authConfig: NextAuthConfig = {
   },
 
   callbacks: {
-    jwt: async ({ token, user }) => {
-      console.log('[callbacks] jwt');
-      console.log({ token });
-      console.log({ user });
-      token.text = 'test';
-      return token;
+    // Middlewareのauthで実行される
+    // NextResponseを返すことでリダイレクトエラーやエラーを返すことができる
+    authorized: ({ auth, request: { nextUrl } }: { auth: Session | null; request: NextRequest }) => {
+      console.log('[callbacks] authorized');
+      // console.log({ auth });
+      console.log({ pathname: nextUrl.pathname });
+
+      const isOnAuthenticatedPage = nextUrl.pathname !== '/login';
+
+      if (isOnAuthenticatedPage) {
+        const isLoggedin = !!auth?.user;
+        if (!isLoggedin) {
+          // falseを返すと，Signinページにリダイレクトされる
+          return false;
+        }
+        return true;
+      }
+      return true;
     },
 
-    session: async ({ session, token }) => {
-      console.log('[callbacks] session');
-      console.log({ session });
-      console.log({ token });
+    // JWTの作成(ログイン時など)、更新(クライアントからのセッション利用時など)のタイミングに実行される
+    // ここでreturnされた情報がJWTに保存され，session callbackに転送される
+    async jwt({ token, user }) {
+      // console.log('[callbacks] jwt');
+      // console.log({ token });
+      // console.log({ user });
+      return { ...token, ...user };
+    },
 
-      session.text = token.text;
+    // useSessionやgetSessionのセッション確認時に実行される
+    // ここでreturnされた情報がクライアントに公開される(パスワードなどの機密情報を保存しないように注意)
+    // 「strategy: jwt」の場合はtoken引数、「strategy: database」の場合はuser引数が利用可能
+    async session({ session, token }) {
+      // console.log('[callbacks] session');
+      // console.log({ session });
+      // console.log({ token });
+      session.user = {
+        access_token: token.access_token,
+        refresh_token: token.refresh_token,
+        token_type: token.token_type,
+        id: token.id,
+        user_id: token.user_id,
+        name: token.name,
+        name_s: token.name_s,
+        email: token.email,
+        tanto_no: token.tanto_no,
+        pc_name: token.pc_name,
+        password_status_no: token.password_status_no,
+        emailVerified: null,
+      } as ExtendedUser;
       return session;
     },
   },
-};
+} satisfies NextAuthConfig;
 
-export const { handlers, signIn, signOut, auth } = NextAuth(authConfig);
+export const { signIn, signOut, auth } = NextAuth(authConfig);
