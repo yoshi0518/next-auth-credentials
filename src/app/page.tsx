@@ -1,5 +1,4 @@
 import { auth } from '@/auth';
-import { AuthButtonServer } from '@/components/auth-button.server';
 
 const Page: React.FC = async () => {
   const session = await auth();
@@ -9,9 +8,6 @@ const Page: React.FC = async () => {
     <main className="flex h-screen flex-col items-center justify-center gap-4">
       <div>
         <h1 className="text-2xl font-bold">Auth.js</h1>
-      </div>
-      <div>
-        <AuthButtonServer />
       </div>
       <div>
         <pre className="bg-slate-100 p-2 text-sm text-slate-700">

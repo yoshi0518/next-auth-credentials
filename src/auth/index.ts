@@ -24,6 +24,9 @@ const authConfig = {
       // 認証処理
       authorize: async ({ id, password }): Promise<User | null> => {
         console.log('authorize', id, password);
+
+        // 本来はバックエンドAPIでログイン認証・トークン発行などを行う
+
         // ダミーユーザー情報
         const users = [
           {
@@ -62,6 +65,10 @@ const authConfig = {
     }),
   ],
 
+  // pages: {
+  //   signIn: '/login',
+  // },
+
   trustHost: true,
   basePath: BASE_PATH,
   debug: Boolean(env.DEBUG),
@@ -70,18 +77,22 @@ const authConfig = {
   },
 
   callbacks: {
+    // JWTの作成(ログイン時など)、更新(クライアントからのセッション利用時など)のタイミングに実行される
+    // ここでreturnされた情報がJWTに保存され，session callbackに転送される
     async jwt({ token, user }) {
-      console.log('[callbacks] jwt');
-      console.log({ token });
-      console.log({ user });
+      // console.log('[callbacks] jwt');
+      // console.log({ token });
+      // console.log({ user });
       return { ...token, ...user };
     },
 
+    // useSessionやgetSessionのセッション確認時に実行される
+    // ここでreturnされた情報がクライアントに公開される(パスワードなどの機密情報を保存しないように注意)
+    // 「strategy: jwt」の場合はtoken引数、「strategy: database」の場合はuser引数が利用可能
     async session({ session, token }) {
-      console.log('[callbacks] session');
-      console.log({ session });
-      console.log({ token });
-
+      // console.log('[callbacks] session');
+      // console.log({ session });
+      // console.log({ token });
       session.user = {
         access_token: token.access_token,
         refresh_token: token.refresh_token,
@@ -101,4 +112,4 @@ const authConfig = {
   },
 } satisfies NextAuthConfig;
 
-export const { handlers, signIn, signOut, auth } = NextAuth(authConfig);
+export const { signIn, signOut, auth } = NextAuth(authConfig);
