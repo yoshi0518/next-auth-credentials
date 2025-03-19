@@ -1,5 +1,4 @@
-import type { NextAuthConfig, Session, User } from 'next-auth';
-import type { NextRequest } from 'next/server';
+import type { NextAuthConfig, User } from 'next-auth';
 import type { ExtendedUser } from 'types/next-auth';
 import { env } from '@/env';
 import NextAuth from 'next-auth';
@@ -24,44 +23,24 @@ const authConfig = {
       },
       // 認証処理
       authorize: async ({ id, password }): Promise<User | null> => {
-        console.log('authorize', id, password);
+        if (typeof id !== 'string') return null;
+        if (typeof password !== 'string') return null;
 
-        // 本来はバックエンドAPIでログイン認証・トークン発行などを行う
-
-        // ダミーユーザー情報
-        const users = [
-          {
-            id: 'test1',
-            name: 'test1',
-            password: 'password1',
-            email: 'test1@example.com',
+        const response = await fetch(`${env.BASE_URL_API}/auth/v1/login/`, {
+          method: 'POST',
+          headers: {
+            'accept': 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded',
           },
-          {
-            id: 'test2',
-            name: 'test2',
-            password: 'password2',
-            email: 'test2@example.com',
-          },
-        ];
+          body: `username=${id}&password=${password}`,
+        });
 
-        // ユーザー情報の検索
-        const user = users.find((user) => user.id === id && user.password === password);
+        if (!response.ok) return null;
 
-        if (!user) return null;
+        const user = (await response.json()) as ExtendedUser;
 
-        return {
-          access_token: 'access_token',
-          refresh_token: 'refresh_token',
-          token_type: 'Bearer',
-          id: user.id,
-          user_id: 'user_id',
-          name: user.name,
-          name_s: user.name,
-          email: user.email,
-          tanto_no: 1,
-          pc_name: 'pc_name',
-          password_status_no: 1,
-        } as ExtendedUser;
+        // アクセストークン、リフレッシュトークンの有効期限を過ぎたら再取得
+        return user;
       },
     }),
   ],
@@ -78,32 +57,13 @@ const authConfig = {
   },
 
   callbacks: {
-    // Middlewareのauthで実行される
-    // NextResponseを返すことでリダイレクトエラーやエラーを返すことができる
-    authorized: ({ auth, request: { nextUrl } }: { auth: Session | null; request: NextRequest }) => {
-      console.log('[callbacks] authorized');
-      // console.log({ auth });
-      console.log({ pathname: nextUrl.pathname });
-
-      const isOnAuthenticatedPage = nextUrl.pathname !== '/login';
-
-      if (isOnAuthenticatedPage) {
-        const isLoggedin = !!auth?.user;
-        if (!isLoggedin) {
-          // falseを返すと，Signinページにリダイレクトされる
-          return false;
-        }
-        return true;
-      }
-      return true;
-    },
-
     // JWTの作成(ログイン時など)、更新(クライアントからのセッション利用時など)のタイミングに実行される
     // ここでreturnされた情報がJWTに保存され，session callbackに転送される
     async jwt({ token, user }) {
       // console.log('[callbacks] jwt');
       // console.log({ token });
       // console.log({ user });
+
       return { ...token, ...user };
     },
 
@@ -114,6 +74,7 @@ const authConfig = {
       // console.log('[callbacks] session');
       // console.log({ session });
       // console.log({ token });
+
       session.user = {
         access_token: token.access_token,
         refresh_token: token.refresh_token,

@@ -1,4 +1,6 @@
+import { logoutAction } from '@/app/_actions';
 import { auth } from '@/auth';
+import { Button } from '@/components/ui/button';
 
 const Page: React.FC = async () => {
   const session = await auth();
@@ -13,6 +15,16 @@ const Page: React.FC = async () => {
         <pre className="bg-slate-100 p-2 text-sm text-slate-700">
           <code>{JSON.stringify(session, null, 2)}</code>
         </pre>
+      </div>
+      <div>
+        <Button
+          onClick={logoutAction}
+          type="button"
+          variant="outline"
+          className="cursor-pointer"
+        >
+          ログアウト
+        </Button>
       </div>
     </main>
   );
