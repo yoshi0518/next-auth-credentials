@@ -1,7 +1,7 @@
 'use server';
 
 import { redirect } from 'next/navigation';
-import { signIn } from '@/auth';
+import { signIn, signOut } from '@/auth';
 import { AuthError } from 'next-auth';
 
 export type LoginFormData = {
@@ -40,3 +40,5 @@ export const loginAction = async (_state: LoginFormData, formData: FormData) => 
     };
   }
 };
+
+export const logoutAction = async () => await signOut();
