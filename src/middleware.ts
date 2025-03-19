@@ -10,7 +10,7 @@ export const config = {
   ],
 };
 
-export default auth((req) => {
+export default auth(async (req) => {
   console.log('[middleware]');
   const { auth, nextUrl } = req;
   const isAuthenticated = !!auth;
@@ -19,11 +19,11 @@ export default auth((req) => {
 
   // 認証済でログイン関連ページを指定 => HOMEへリダイレクト
   if (isAuthenticated && isUnAuthenticatedPage) {
-    return NextResponse.redirect(new URL('/', `${env.BASE_URL}`));
+    return NextResponse.redirect(new URL('/', `${env.BASE_URL_APP}`));
   }
 
   // 未認証でログイン関連ページ以外を指定 => ログインページへリダイレクト
   if (!auth && !isUnAuthenticatedPage) {
-    return NextResponse.redirect(new URL('/login', `${env.BASE_URL}`));
+    return NextResponse.redirect(new URL('/login', `${env.BASE_URL_APP}`));
   }
 });

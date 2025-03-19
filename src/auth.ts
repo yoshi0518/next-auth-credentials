@@ -23,42 +23,24 @@ const authConfig = {
       },
       // 認証処理
       authorize: async ({ id, password }): Promise<User | null> => {
-        // 本来はバックエンドAPIでログイン認証・トークン発行などを行う
+        if (typeof id !== 'string') return null;
+        if (typeof password !== 'string') return null;
 
-        // ダミーユーザー情報
-        const users = [
-          {
-            id: 'test1',
-            name: 'test1',
-            password: 'password1',
-            email: 'test1@example.com',
+        const response = await fetch(`${env.BASE_URL_API}/auth/v1/login/`, {
+          method: 'POST',
+          headers: {
+            'accept': 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded',
           },
-          {
-            id: 'test2',
-            name: 'test2',
-            password: 'password2',
-            email: 'test2@example.com',
-          },
-        ];
+          body: `username=${id}&password=${password}`,
+        });
 
-        // ユーザー情報の検索
-        const user = users.find((user) => user.id === id && user.password === password);
+        if (!response.ok) return null;
 
-        if (!user) return null;
+        const user = (await response.json()) as ExtendedUser;
 
-        return {
-          access_token: 'access_token',
-          refresh_token: 'refresh_token',
-          token_type: 'Bearer',
-          id: user.id,
-          user_id: 'user_id',
-          name: user.name,
-          name_s: user.name,
-          email: user.email,
-          tanto_no: 1,
-          pc_name: 'pc_name',
-          password_status_no: 1,
-        } as ExtendedUser;
+        // アクセストークン、リフレッシュトークンの有効期限を過ぎたら再取得
+        return user;
       },
     }),
   ],
@@ -81,6 +63,7 @@ const authConfig = {
       // console.log('[callbacks] jwt');
       // console.log({ token });
       // console.log({ user });
+
       return { ...token, ...user };
     },
 
@@ -91,6 +74,7 @@ const authConfig = {
       // console.log('[callbacks] session');
       // console.log({ session });
       // console.log({ token });
+
       session.user = {
         access_token: token.access_token,
         refresh_token: token.refresh_token,

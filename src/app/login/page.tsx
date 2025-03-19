@@ -2,6 +2,7 @@
 
 import type { LoginFormData } from '@/app/_actions';
 import { useActionState } from 'react';
+import Link from 'next/link';
 import { loginAction } from '@/app/_actions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -17,7 +18,7 @@ const Page: React.FC = () => {
 
   return (
     <main className="flex h-screen flex-col items-center justify-center gap-4">
-      <div className="w-full max-w-md space-y-4">
+      <div className="w-full max-w-md space-y-4 rounded-2xl border p-8 shadow-md">
         <h1 className="text-center text-2xl font-bold">Login</h1>
         <div className="text-red-500">{state.message}</div>
         <form
@@ -42,7 +43,15 @@ const Page: React.FC = () => {
             />
           </div>
 
-          <Button type="submit">ログイン</Button>
+          <div className="flex items-center justify-between">
+            <Button type="submit">ログイン</Button>
+            <Link
+              href="/"
+              className="text-sm text-blue-500 underline"
+            >
+              パスワードを忘れた方はこちら
+            </Link>
+          </div>
         </form>
       </div>
     </main>
