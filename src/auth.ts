@@ -1,6 +1,8 @@
 import type { NextAuthConfig, User } from 'next-auth';
 import type { ExtendedUser } from 'types/next-auth';
+import { fetchLoginAction } from '@/app/_actions';
 import { env } from '@/env';
+import { jwtDecode } from 'jwt-decode';
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 
@@ -26,14 +28,7 @@ const authConfig = {
         if (typeof id !== 'string') return null;
         if (typeof password !== 'string') return null;
 
-        const response = await fetch(`${env.BASE_URL_API}/auth/v1/login/`, {
-          method: 'POST',
-          headers: {
-            'accept': 'application/json',
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          body: `username=${id}&password=${password}`,
-        });
+        const response = await fetchLoginAction({ id, password });
 
         if (!response.ok) return null;
 
@@ -60,9 +55,17 @@ const authConfig = {
     // JWTの作成(ログイン時など)、更新(クライアントからのセッション利用時など)のタイミングに実行される
     // ここでreturnされた情報がJWTに保存され，session callbackに転送される
     async jwt({ token, user }) {
-      // console.log('[callbacks] jwt');
-      // console.log({ token });
-      // console.log({ user });
+      console.log('[callbacks] jwt');
+      console.log({ token });
+      console.log({ user });
+
+      if (typeof token.access_token === 'string') {
+        console.log({ access_token: token.access_token, decoded: jwtDecode(token.access_token) });
+      }
+
+      if (typeof token.refresh_token === 'string') {
+        console.log({ refresh_token: token.refresh_token, decoded: jwtDecode(token.refresh_token) });
+      }
 
       return { ...token, ...user };
     },

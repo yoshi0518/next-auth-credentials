@@ -2,6 +2,7 @@
 
 import { redirect } from 'next/navigation';
 import { signIn, signOut } from '@/auth';
+import { env } from '@/env';
 import { AuthError } from 'next-auth';
 
 export type LoginFormData = {
@@ -42,3 +43,16 @@ export const loginAction = async (_state: LoginFormData, formData: FormData) => 
 };
 
 export const logoutAction = async () => await signOut();
+
+export const fetchLoginAction = async ({ id, password }: { id: string; password: string }) => {
+  const response = await fetch(`${env.BASE_URL_API}/auth/v1/login/`, {
+    method: 'POST',
+    headers: {
+      'accept': 'application/json',
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: `username=${id}&password=${password}`,
+  });
+
+  return response;
+};
