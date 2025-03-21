@@ -5,6 +5,7 @@ const envSchema = z.object({
   DEBUG: z.string().default('true'),
   BASE_URL_APP: z.string().default('http://localhost:3000'),
   BASE_URL_API: z.string().default('http://localhost:8000'),
+  AUTH_SECRET: z.string().default(''),
   AUTH_SECRET_KEY: z.string().default(''),
 });
 
@@ -13,6 +14,7 @@ const parsedEnv = envSchema.safeParse({
   DEBUG: process.env.DEBUG,
   BASE_URL_APP: process.env.BASE_URL_APP,
   BASE_URL_API: process.env.BASE_URL_API,
+  AUTH_SECRET: process.env.AUTH_SECRET,
   AUTH_SECRET_KEY: process.env.AUTH_SECRET_KEY,
 });
 

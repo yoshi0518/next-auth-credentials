@@ -3,6 +3,7 @@
 import type { LoginFormData } from '@/app/_actions';
 import { useActionState } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { loginAction } from '@/app/_actions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -15,12 +16,14 @@ const Page: React.FC = () => {
   } satisfies LoginFormData;
 
   const [state, dispatch] = useActionState(loginAction, initialState);
+  const expired = useSearchParams().get('expired');
 
   return (
     <main className="flex h-screen flex-col items-center justify-center gap-4">
       <div className="w-full max-w-md space-y-4 rounded-2xl border p-8 shadow-md">
         <h1 className="text-center text-2xl font-bold">Login</h1>
-        <div className="text-red-500">{state.message}</div>
+        <div className="text-sm text-red-500">{state.message}</div>
+        <div className="text-sm text-red-500">{expired && 'ログイン有効期限切れです。'}</div>
         <form
           className="space-y-4"
           action={dispatch}
