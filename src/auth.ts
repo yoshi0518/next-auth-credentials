@@ -1,7 +1,8 @@
 import type { NextAuthConfig, User } from 'next-auth';
 import type { ExtendedUser } from 'types/next-auth';
-import { fetchLoginAction } from '@/app/_actions';
+import { fetchLoginAction, fetchUpdateAccessTokenAction } from '@/app/_actions';
 import { env } from '@/env';
+import { Dayjs } from '@/lib/dayjs';
 import { jwtDecode } from 'jwt-decode';
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
@@ -32,17 +33,10 @@ const authConfig = {
 
         if (!response.ok) return null;
 
-        const user = (await response.json()) as ExtendedUser;
-
-        // アクセストークン、リフレッシュトークンの有効期限を過ぎたら再取得
-        return user;
+        return (await response.json()) as ExtendedUser;
       },
     }),
   ],
-
-  pages: {
-    signIn: '/login',
-  },
 
   trustHost: true,
   basePath: BASE_PATH,
@@ -54,20 +48,31 @@ const authConfig = {
   callbacks: {
     // JWTの作成(ログイン時など)、更新(クライアントからのセッション利用時など)のタイミングに実行される
     // ここでreturnされた情報がJWTに保存され，session callbackに転送される
-    async jwt({ token, user }) {
-      console.log('[callbacks] jwt');
-      console.log({ token });
-      console.log({ user });
+    async jwt({ token, user: currentUser }) {
+      // console.log('[callbacks] jwt');
+      // console.log({ token });
+      // console.log({ currentUser });
 
       if (typeof token.access_token === 'string') {
-        console.log({ access_token: token.access_token, decoded: jwtDecode(token.access_token) });
+        const decoded = jwtDecode(token.access_token);
+        // console.log('=== decoded ===');
+        // console.log({ decoded });
+
+        // アクセストークン有効期限切れの場合は更新
+        if (
+          'expired_dt' in decoded &&
+          typeof decoded.expired_dt === 'string' &&
+          decoded.expired_dt < new Dayjs().format()
+        ) {
+          const response = await fetchUpdateAccessTokenAction(token.refresh_token as string);
+          if (response.ok) {
+            const newUser = (await response.json()) as ExtendedUser;
+            return { ...token, ...currentUser, ...newUser };
+          }
+        }
       }
 
-      if (typeof token.refresh_token === 'string') {
-        console.log({ refresh_token: token.refresh_token, decoded: jwtDecode(token.refresh_token) });
-      }
-
-      return { ...token, ...user };
+      return { ...token, ...currentUser };
     },
 
     // useSessionやgetSessionのセッション確認時に実行される

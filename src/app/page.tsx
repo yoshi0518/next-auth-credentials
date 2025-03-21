@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 
 const Page: React.FC = async () => {
   const session = await auth();
-  console.log({ session });
 
   return (
     <main className="flex h-screen flex-col items-center justify-center gap-4">

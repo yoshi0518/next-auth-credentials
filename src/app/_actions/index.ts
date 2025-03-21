@@ -42,7 +42,7 @@ export const loginAction = async (_state: LoginFormData, formData: FormData) => 
   }
 };
 
-export const logoutAction = async () => await signOut();
+export const logoutAction = async () => await signOut({ redirectTo: '/login' });
 
 export const fetchLoginAction = async ({ id, password }: { id: string; password: string }) => {
   const response = await fetch(`${env.BASE_URL_API}/auth/v1/login/`, {
@@ -52,6 +52,17 @@ export const fetchLoginAction = async ({ id, password }: { id: string; password:
       'Content-Type': 'application/x-www-form-urlencoded',
     },
     body: `username=${id}&password=${password}`,
+  });
+
+  return response;
+};
+
+export const fetchUpdateAccessTokenAction = async (refresh_token: string) => {
+  const response = await fetch(`${env.BASE_URL_API}/auth/v1/login/${refresh_token}/`, {
+    method: 'PUT',
+    headers: {
+      accept: 'application/json',
+    },
   });
 
   return response;

@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import { env } from '@/env';
+import { Dayjs } from '@/lib/dayjs';
+import { jwtDecode } from 'jwt-decode';
 
 const UNAUTHENTICATED_PAGE_LIST = ['/login', '/logout', '/reset'];
 
@@ -15,15 +17,38 @@ export default auth(async (req) => {
   const { auth, nextUrl } = req;
   const isAuthenticated = !!auth;
   const isUnAuthenticatedPage = UNAUTHENTICATED_PAGE_LIST.includes(nextUrl.pathname);
-  console.log({ isAuthenticated, isUnAuthenticatedPage });
+  const isValidateRefreshToken = (() => {
+    if (isAuthenticated && typeof auth.user.refresh_token === 'string') {
+      const decoded = jwtDecode(auth.user.refresh_token);
+      // console.log({ decoded });
 
-  // 認証済でログイン関連ページを指定 => HOMEへリダイレクト
-  if (isAuthenticated && isUnAuthenticatedPage) {
+      if (
+        'expired_dt' in decoded &&
+        typeof decoded.expired_dt === 'string' &&
+        decoded.expired_dt < new Dayjs().format()
+      ) {
+        return false;
+      }
+
+      return true;
+    }
+
+    return true;
+  })();
+  // console.log({ isAuthenticated, isUnAuthenticatedPage, isValidateRefreshToken });
+
+  // 認証済、リフレッシュトークン無効、ログイン関連ページ以外 => /login?expired=true
+  if (isAuthenticated && !isValidateRefreshToken && !isUnAuthenticatedPage) {
+    return NextResponse.redirect(new URL('/login?expired=true', `${env.BASE_URL_APP}`));
+  }
+
+  // 認証済、リフレッシュトークン有効、ログイン関連ページ => /
+  if (isAuthenticated && isValidateRefreshToken && isUnAuthenticatedPage) {
     return NextResponse.redirect(new URL('/', `${env.BASE_URL_APP}`));
   }
 
-  // 未認証でログイン関連ページ以外を指定 => ログインページへリダイレクト
-  if (!auth && !isUnAuthenticatedPage) {
+  // 未認証、ログイン関連ページ以外 => /login
+  if (!isAuthenticated && !isUnAuthenticatedPage) {
     return NextResponse.redirect(new URL('/login', `${env.BASE_URL_APP}`));
   }
 });
